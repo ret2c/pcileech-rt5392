@@ -14,3 +14,13 @@ It contains:
 This firmware was created for security research, and I do not condone cheating in online multiplayer games. Additionally, this firmware is burned for being published publically, and most games have already blocked this Ralink chip.
 
 Creating this repo as a base right now, planning to publish this on 4/1.
+
+## Thank you to:
+For support, guidance, and resources
+- [Simonrak](https://github.com/Simonrak/)
+- [Desilvered](https://github.com/Silverr12)
+- [Dzul](https://github.com/dzul221)
+- [Ekknod](https://github.com/ekknod/)
+- [Ap3x](https://github.com/Ap3x/)
+- [Ulf Frisk](https://github.com/ufrisk)
+- And anybody else I've asked to help w/ debugging lol
