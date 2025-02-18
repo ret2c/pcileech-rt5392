@@ -795,13 +795,13 @@ module pcileech_bar_impl_zerowrite4k(
 
 endmodule
 
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------
 // RT5392 BAR Controller
 // Credit to dzul221 on GH for the RT3090 base
-// Includes additional reads based on activity in MMIOTrace w/ the RT5392
-// ------------------------------------------------------------------------
+// Includes additional reads based on observed activity in MMIOTrace w/ the RT5392
+// ----------------------------------------------------------------------------------
  
-module pcileech_bar_impl_meowkittymeow(
+module pcileech_bar_impl_cyphercon8(
     input               rst,
     input               clk,
     // incoming BAR writes:
@@ -848,18 +848,27 @@ module pcileech_bar_impl_meowkittymeow(
 
     if (drd_req_valid) begin
 		case (({drd_req_addr[31:24], drd_req_addr[23:16], drd_req_addr[15:08], drd_req_addr[07:00]} - (base_address_register & ~32'h4)) & 32'hFFFF)
+			// We need to begin by hardcoding the first 3 bytes, since this aligns with the vendor prefix and is not subject to change
 			16'h0598 : begin                          // MAC_ADDR_HIGH - Verified in trace
 				rd_rsp_data[7:0]   <= 8'h00;         // Vendor prefix 
 				rd_rsp_data[15:8]  <= 8'h1A;         // Vendor prefix 
 				rd_rsp_data[23:16] <= 8'hEF;         // Vendor prefix
 				rd_rsp_data[31:24] <= ((0 + (number) % (15 + 1 - 0)) << 4) | (0 + (number + 3) % (15 + 1 - 0));
 			end
+			// Afterwards, we'll begin the MAC randomization process. The last 3 bytes are dynamic based on the number counter logic
+			// The dynamic bytes change on each clock cycle as the defined 'number' increments
 			16'h0594 : begin                          // MAC_ADDR_LOW - Verified in trace
 				rd_rsp_data[7:0]   <= ((0 + (number + 6) % (15 + 1 - 0)) << 4) | (0 + (number + 9) % (15 + 1 - 0));
 				rd_rsp_data[15:8]  <= ((0 + (number + 12) % (15 + 1 - 0)) << 4) | (0 + (number + 15) % (15 + 1 - 0));
 				rd_rsp_data[31:16] <= 16'h0000;
 			end
-				
+			// Defined registers that overlap from RT3090 to RT5392
+			// Register names are based off observations in the rt2800pci driver's source code
+			// There is still a chance that some of this is marked incorrectly, please submit a PR or contact me to fix
+			
+			// https://github.com/torvalds/linux/blob/master/drivers/net/wireless/ralink/rt2x00/rt2800.h
+			// https://github.com/torvalds/linux/blob/master/drivers/net/wireless/ralink/rt2x00/rt2800pci.c
+			
 			16'h0000 : rd_rsp_data <= 32'h00001C00;  // SYS_CTRL - System control register
 			16'h0004 : rd_rsp_data <= 32'h00000010;  // SYS_CFG - System configuration
 			16'h0108 : rd_rsp_data <= 32'h14010000;  // PCI_CFG - PCI configuration register
@@ -948,9 +957,11 @@ module pcileech_bar_impl_meowkittymeow(
 			default : rd_rsp_data <= 32'h00000000;  
         endcase               
     end else if (dwr_valid) begin
+	// We don't need to handle writes with this card, since this is handled by the driver
         case (({dwr_addr[31:24], dwr_addr[23:16], dwr_addr[15:08], dwr_addr[07:00]} - (base_address_register & ~32'h4)) & 32'hFFFF) 
-        endcase
+    endcase
     end else begin
+	// Dynamic logic to modify MAC address
         rd_rsp_data[7:0]   <= ((0 + (number) % (15 + 1 - 0)) << 4) | (0 + (number + 3) % (15 + 1 - 0));
         rd_rsp_data[15:8]  <= ((0 + (number + 6) % (15 + 1 - 0)) << 4) | (0 + (number + 9) % (15 + 1 - 0));
         rd_rsp_data[23:16] <= ((0 + (number + 12) % (15 + 1 - 0)) << 4) | (0 + (number + 15) % (15 + 1 - 0));
