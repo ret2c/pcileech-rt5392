@@ -22,6 +22,7 @@ For support, guidance, and resources.
 - [Simonrak](https://github.com/Simonrak/)
 - [Desilvered](https://github.com/Silverr12)
 - [Dzul](https://github.com/dzul221)
+- [Kilmu](https://github.com/kilmu1337/)
 - [Ekknod](https://github.com/ekknod/)
 - [Ap3x](https://github.com/Ap3x/)
 - [Ulf Frisk](https://github.com/ufrisk)
