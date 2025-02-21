@@ -6,11 +6,14 @@ This firmware was created for my CypherCon 8 talk: [Not Fair!!1!: Bypassing Anti
 
 ## Features
 - Shadow Configuration Space
-  - If you're tracking my commits for some reason, this current build has an incorrect **Message Lower Address** value
 - Writemask (No RW1C Mask atm, sorry - will trip Gummybear detection)
 - BAR Controller (Thank you [Dzul](https://github.com/dzul221/pcileech-Ralink-3090-/blob/main/src/pcileech_tlps128_bar_controller.sv) for the 3090 base)
+- MSI-X Interrupts (Thank you [Kilmu](https://github.com/kilmu1337/pcileech-csi2host/) for logic base)
 
 You will not be able to recustomize the IP Block with this, stick to Shadow CFG. Edit `/pcie_7x/pcie_7x_0_core_top.v` with your chosen configurations.
+
+## PCILeech Firmware Tree 🌲
+- I'll fill this out later
 
 ## ❗ Disclaimer ❗
 **Do not attempt to use this firmware with any cheating software.**
