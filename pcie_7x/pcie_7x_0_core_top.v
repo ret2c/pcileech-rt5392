@@ -131,8 +131,11 @@ full list: https://github.com/torvalds/linux/blob/master/drivers/net/wireless/at
   parameter [10:0]  ENABLE_MSG_ROUTE = 11'b00000000000,
   parameter         ENABLE_RX_TD_ECRC_TRIM = "FALSE",
   parameter [31:0]  EXPANSION_ROM = 32'h00000000,
-  parameter [5:0]   EXT_CFG_CAP_PTR = 6'h0A,
-  parameter [9:0]   EXT_CFG_XP_CAP_PTR = 10'h0A,
+  // This pointer destroyed the config space
+  // But, drvscan shows this device as breathing w/ MSI-X interrupts, since MSI cap is built prior to Shadow CFG
+  // I'll fix it another time, but in its current state - the target driver loads
+  parameter [5:0]   EXT_CFG_CAP_PTR = 6'h3F, // INCORRECT
+  parameter [9:0]   EXT_CFG_XP_CAP_PTR = 10'h3F, // INCORRECT
   parameter [7:0]   HEADER_TYPE = 8'h00,
   parameter [7:0]   INTERRUPT_PIN = 8'h1,
 
