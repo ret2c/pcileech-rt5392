@@ -795,15 +795,16 @@ module pcileech_bar_impl_zerowrite4k(
 
 endmodule
 
-// ----------------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // RT5392 BAR Controller
 // Credit to dzul221 on GH for the RT3090 base
-// Includes additional reads based on observed activity in MMIOTrace w/ the RT5392
-// ----------------------------------------------------------------------------------
+// Includes additional reads based on activity in MMIOTrace w/ the RT5392
+// ------------------------------------------------------------------------
  
-module pcileech_bar_impl_cyphercon8(
+module pcileech_bar_impl_meowkittymeow(
     input               rst,
     input               clk,
+	output wire			int_enable,
     // incoming BAR writes:
     input [31:0]        wr_addr,
     input [3:0]         wr_be,
@@ -849,7 +850,7 @@ module pcileech_bar_impl_cyphercon8(
     if (drd_req_valid) begin
 		case (({drd_req_addr[31:24], drd_req_addr[23:16], drd_req_addr[15:08], drd_req_addr[07:00]} - (base_address_register & ~32'h4)) & 32'hFFFF)
 			// We need to begin by hardcoding the first 3 bytes, since this aligns with the vendor prefix and is not subject to change
-			16'h0598 : begin                          // MAC_ADDR_HIGH - Verified in trace
+			16'h0598 : begin                         // MAC_ADDR_HIGH - Verified in trace
 				rd_rsp_data[7:0]   <= 8'h00;         // Vendor prefix 
 				rd_rsp_data[15:8]  <= 8'h1A;         // Vendor prefix 
 				rd_rsp_data[23:16] <= 8'hEF;         // Vendor prefix
@@ -868,7 +869,6 @@ module pcileech_bar_impl_cyphercon8(
 			
 			// https://github.com/torvalds/linux/blob/master/drivers/net/wireless/ralink/rt2x00/rt2800.h
 			// https://github.com/torvalds/linux/blob/master/drivers/net/wireless/ralink/rt2x00/rt2800pci.c
-			
 			16'h0000 : rd_rsp_data <= 32'h00001C00;  // SYS_CTRL - System control register
 			16'h0004 : rd_rsp_data <= 32'h00000010;  // SYS_CFG - System configuration
 			16'h0108 : rd_rsp_data <= 32'h14010000;  // PCI_CFG - PCI configuration register
@@ -942,7 +942,7 @@ module pcileech_bar_impl_cyphercon8(
 			16'h1414 : rd_rsp_data <= 32'h0000100A;  // MAC_PCI_CFG - MAC PCI configuration
 			16'h1418 : rd_rsp_data <= 32'h0FFF0000;  // MAC_CFG - MAC configuration
 
-			// New registers from MMIOTrace
+			// Additional registers from MMIOTrace
 			16'h1208 : rd_rsp_data <= 32'h00008405;  // PWR_PIN_CFG - Power pin configuration
 			16'h1718 : rd_rsp_data <= 32'h810f21bc;  // MAC_STATUS - MAC status register
 			16'h7010 : rd_rsp_data <= 32'h0010101ff; // PWR_STATE_CTRL - Power state control
@@ -957,15 +957,26 @@ module pcileech_bar_impl_cyphercon8(
 			default : rd_rsp_data <= 32'h00000000;  
         endcase               
     end else if (dwr_valid) begin
-	// We don't need to handle writes with this card, since this is handled by the driver
         case (({dwr_addr[31:24], dwr_addr[23:16], dwr_addr[15:08], dwr_addr[07:00]} - (base_address_register & ~32'h4)) & 32'hFFFF) 
-    endcase
+        endcase
     end else begin
-	// Dynamic logic to modify MAC address
         rd_rsp_data[7:0]   <= ((0 + (number) % (15 + 1 - 0)) << 4) | (0 + (number + 3) % (15 + 1 - 0));
         rd_rsp_data[15:8]  <= ((0 + (number + 6) % (15 + 1 - 0)) << 4) | (0 + (number + 9) % (15 + 1 - 0));
         rd_rsp_data[23:16] <= ((0 + (number + 12) % (15 + 1 - 0)) << 4) | (0 + (number + 15) % (15 + 1 - 0));
         rd_rsp_data[31:24] <= ((0 + (number) % (15 + 1 - 0)) << 4) | (0 + (number + 3) % (15 + 1 - 0));
 		end
 	end
+	
+	bit[31:0] int_start_cnt = 0; // Initialize counter
+	always @ (posedge clk) begin
+		if (rst) begin
+			int_start_cnt <= 0;
+		end else if (int_start_cnt <= 32'd500000) begin
+			int_start_cnt <= int_start_cnt + 1'b1; // Tick up if value is not 32'd500000
+		end
+	end
+    // Trigger int_enable when counter reaches the target value
+    // This will tell pcileech_pcie_cfg_a7.sv to trigger o_int
+	assign int_enable = int_start_cnt >= 32'd500000;
+	assign int_enable = 0 // Resets count
 endmodule

@@ -458,7 +458,36 @@ module pcileech_pcie_cfg_a7(
                 end
                 
             end
-
-     
-    
+	// Thank you Kilmu for original logic <3
+    // This logic is different than what generated the drvscan-interrupt-info screenshot in the README.md
+	wire o_int; // Interrupt output signal, triggers the interrupt being sent
+	always @ ( posedge clk_pcie ) begin
+		// State Management
+		if ( rst ) begin
+			cfg_int_valid <= 1'b0;
+			cfg_msg_num <= 5'b0;
+			cfg_int_assert <= 1'b0;
+			cfg_int_di <= 8'b0;
+			cfg_int_stat <= 1'b0;
+		end else if (cfg_int_ready && cfg_int_valid) begin
+			cfg_int_valid <= 1'b0;
+		end else if (o_int) begin
+			cfg_int_valid <= 1'b1;
+		end
+	end
+	time int_cnt = 0;
+    // If you want to get a similar reading to the 2,521,672 MSI-X int count in the screenshot:
+    // Adjust int_cycle_count back to 32'd100000000 (100M)
+	parameter int_cycle_count = 32'd100000 // Counter, adjust as needed
+	always @ ( posedge clk_pcie ) begin
+		// Interrupt Timer
+		if (rst) begin
+			int_cnt <= 0;
+		end else if (int_cnt == int_cycle_count) begin
+			int_cnt <= 0;
+		end else if (int_enable) begin
+			int_cnt <= int_cnt + 1;
+		end
+	end
+	assign o_int = (int_cnt == int_cycle_count); // 100K cycles
 endmodule
