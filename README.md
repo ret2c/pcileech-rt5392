@@ -9,9 +9,8 @@ This firmware was created for my CypherCon 8 talk: [Not Fair!!1!: Bypassing Anti
 - Shadow Configuration Space
 - Writemask
 - BAR Controller (Thank you [Dzul](https://github.com/dzul221/pcileech-Ralink-3090-/blob/main/src/pcileech_tlps128_bar_controller.sv) for the 3090 base)
+  - Static BAR for the most part, loads EFUSE registers defined in rt2800pci driver
 - MSI-X Interrupts (Thank you [Kilmu](https://github.com/kilmu1337/pcileech-csi2host/) for logic base)
-
-You will not be able to recustomize the IP Block with this, stick to Shadow CFG. Edit `/pcie_7x/pcie_7x_0_core_top.v` with your chosen configurations.
 
 ## PCILeech Firmware Tree 🌲
 List of files that have been changed from the original [pcileech-fpga](https://github.com/ufrisk/pcileech-fpga) repository.
@@ -19,7 +18,7 @@ List of files that have been changed from the original [pcileech-fpga](https://g
   - [pcileech_cfgspace.coe](https://github.com/ret2c/pcileech-rt5392/blob/main/ip/pcileech_cfgspace.coe): Coefficient file that contains the shadow configuration for the firmware, allows you to present the card as a legal device
   - [pcileech_cfgspace_writemask.coe](https://github.com/ret2c/pcileech-rt5392/blob/main/ip/pcileech_cfgspace_writemask.coe): Coefficient file that contains the writemask for the firmware, setting a permission map for which bits can be modified in the configuration space
 - /pcie_7x/ Folder
-  - [pcie_7x_0_core_top.v](https://github.com/ret2c/pcileech-rt5392/blob/main/pcie_7x/pcie_7x_0_core_top.v): Core file for defines the implementation for the PCIe endpoint interface. Includes cord configuration, support for capabilities (such as MSI(-x), AER, PM, DSN, etc.), clock management, and more. Since this firmware was already built from a .tcl, you can't recustomize the IP block through Vivado, you have to manually edit this file
+  - [pcie_7x_0_core_top.v](https://github.com/ret2c/pcileech-rt5392/blob/main/pcie_7x/pcie_7x_0_core_top.v): Core file for defines the implementation for the PCIe endpoint interface. Includes core configuration, support for the device's capabilities (such as MSI(-x), AER, PM, DSN, etc.), clock management, and more. Since this firmware was already built from a .tcl, you can't recustomize the IP block through Vivado, you have to manually edit this file
 - /src/ Folder
   - [pcileech_pcie_a7.sv](https://github.com/ret2c/pcileech-rt5392/blob/main/src/pcileech_pcie_a7.sv): Configuration file for physical PCIe signals, FIFO interfaces, etc. Main implementation is the inclusion of interrupt definitions to enable them
   - [pcileech_pcie_cfg_a7.sv](https://github.com/ret2c/pcileech-rt5392/blob/main/src/pcileech_pcie_cfg_a7.sv): Management for PCIe configuration space access and control, including R/W operations, device status, control registers, BAR tracking, and primarily (for our customization) interrupt functionality. Logic at the bottom is what sends an interrupt (`o_int`) through the wire
@@ -31,7 +30,7 @@ Realistically, you could configure each and every file within this repository fo
 ## ❗ Disclaimer ❗
 **Do not attempt to use this firmware with any cheating software.**
 
-This firmware was created for security research, and I do not condone cheating in online multiplayer games. Additionally, this firmware is burned for being published publically, and most games have already blocked this Ralink chip. I will only support this for security research.
+This firmware was created for security research, and I do not condone cheating in online multiplayer games. Additionally, this firmware is burned for being published publically, and most games have already blacklisted this Ralink chip. I will only support this for security research.
 
 ## Thank you to:
 For support, guidance, and resources.
