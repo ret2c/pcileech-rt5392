@@ -7,6 +7,7 @@ This firmware was created for my CypherCon 8 talk: [Not Fair!!1!: Bypassing Anti
 
 ## Features
 - Shadow Configuration Space
+  - Currently semi-busted, `EXT_CFG_CAP_PTR` and `EXT_CFG_XP_CAP_PTR` have incorrect values
 - Writemask
 - BAR Controller (Thank you [Dzul](https://github.com/dzul221/pcileech-Ralink-3090-/blob/main/src/pcileech_tlps128_bar_controller.sv) for the 3090 base)
   - Static BAR for the most part, loads EFUSE registers defined in rt2800pci driver
