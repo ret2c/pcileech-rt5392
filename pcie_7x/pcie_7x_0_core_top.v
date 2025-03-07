@@ -122,9 +122,11 @@ module pcie_7x_0_core_top # (
   parameter [10:0]  ENABLE_MSG_ROUTE = 11'b00000000000,
   parameter         ENABLE_RX_TD_ECRC_TRIM = "FALSE",
   parameter [31:0]  EXPANSION_ROM = 32'h00000000,
-  // The following values are (most likely) incorrect
-  parameter [5:0]   EXT_CFG_CAP_PTR = 6'h18, // NOT TESTED
-  parameter [9:0]   EXT_CFG_XP_CAP_PTR = 10'h3FF, // NOT TESTED
+  // Correct in theory, but core_top needs to be reordered for Type 0 & MSI Cap to be built
+  // manually before letting Shadow CFG. If you fix this before I get a chance to,
+  // please open a PR & I'll toss you in the credits <3
+  parameter [5:0]   EXT_CFG_CAP_PTR = 6'h18, // ?? 
+  parameter [9:0]   EXT_CFG_XP_CAP_PTR = 10'h3FF, // ??
   parameter [7:0]   HEADER_TYPE = 8'h00,
   parameter [7:0]   INTERRUPT_PIN = 8'h1,
 
