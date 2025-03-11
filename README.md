@@ -28,11 +28,6 @@ List of files that have been changed from the original [pcileech-fpga](https://g
  
 Realistically, you could configure each and every file within this repository for your intended purpose (like `tlp_magic` in `/src/pcileech_fifo.sv` for DNA Lock) but it's not necessary for getting a pass on [drvscan](https://github.com/Crump3tte/drvscan-interrupt-info).
 
-## ❗ Disclaimer ❗
-**Do not attempt to use this firmware with any cheating software.**
-
-This firmware was created for security research, and I do not condone cheating in online multiplayer games. Additionally, this firmware is burned for being published publically, and most games have already blacklisted this Ralink chip. I will only support this for security research.
-
 ## Thank you to:
 For support, guidance, and resources.
 - [Simonrak](https://github.com/Simonrak/)
