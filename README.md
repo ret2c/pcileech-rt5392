@@ -2,7 +2,7 @@
 PCILeech firmware, masquerading as a legal Ralink RT5392 device<br>
 This firmware was created for my CypherCon 8 talk: [Not Fair!!1!: Bypassing Anti-Cheat With Direct Memory Access](https://cyphercon.com/presentation/not-fair1-bypassing-anti-cheat-with-direct-memory-access/).
 
-![TeleScan output for flashed firmware](https://i.imgur.com/fr2u0AY.png)
+![DM/Resource + ipconfig + RWEverything Output](https://i.imgur.com/OLmoM0Q.png)
 ![Drvscan-Interrupt-Info output](https://i.imgur.com/MMHiWFY.png)
 
 ## Features
@@ -26,9 +26,9 @@ List of files that have been changed from the original [pcileech-fpga](https://g
   - [pcileech_pcie_tlp_a7.sv](https://github.com/ret2c/pcileech-rt5392/blob/main/src/pcileech_pcie_tlp_a7.sv): Configuration file for TLP handling. Handles TLP processing, filtering, and routing. Main implementation is the inclusion of interrupt definitions to enable them
   - [pcileech_tlps128_bar_controller.sv](https://github.com/ret2c/pcileech-rt5392/blob/main/src/pcileech_tlps128_bar_controller.sv): PCIe BAR and PIO controller module. This file enables you to simulate behavior traits of the original donor card (RT5392 in this case). Since older Ralink chips are pretty easy to load the driver for, we only use static reads for the EFUSE logic seen in the original Linux driver code ([rt2800pci.c](https://github.com/torvalds/linux/blob/master/drivers/net/wireless/ralink/rt2x00/rt2800pci.c) & [rt2800.h](https://github.com/torvalds/linux/blob/master/drivers/net/wireless/ralink/rt2x00/rt2800.h)). Additionally, this file contains the logic to tell `pcileech_pcie_cfg_a7.sv` when to trigger an interrupt by implementing a counter that ticks per clock cycle
  
-Realistically, you could configure each and every file within this repository for your intended purpose (like `tlp_magic` in `/src/pcileech_fifo.sv` for DNA Lock) but it's not necessary for getting a pass on [drvscan](https://github.com/Crump3tte/drvscan-interrupt-info).
+Realistically, you could configure each and every file within this repository for your intended purpose (like `tlp_magic` in `/src/pcileech_fifo.sv` for DNA Lock) but it's not necessary for getting a pass on [drvscan-interrupt-info](https://github.com/Crump3tte/drvscan-interrupt-info).
 
-## Thank you to:
+## Thank you:
 For support, guidance, and resources.
 - [Simonrak](https://github.com/Simonrak/)
 - [Desilvered](https://github.com/Silverr12)
@@ -37,4 +37,4 @@ For support, guidance, and resources.
 - [Ekknod](https://github.com/ekknod/)
 - [Ap3x](https://github.com/Ap3x/)
 - [Ulf Frisk](https://github.com/ufrisk)
-- Anybody else I've asked for help with debugging lol
+- Anybody else I've asked for help with debugging
