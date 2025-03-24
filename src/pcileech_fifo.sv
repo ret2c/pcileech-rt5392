@@ -8,8 +8,6 @@
 // Special thanks to: Dmytro Oleksiuk @d_olex
 //
 
-//DNA LOCK WAS WIPED FROM THIS CARD ALREADY
-
 `timescale 1ns / 1ps
 `include "pcileech_header.svh"
 
@@ -19,8 +17,8 @@ module pcileech_fifo #(
     parameter               PARAM_DEVICE_ID = 0,
     parameter               PARAM_VERSION_NUMBER_MAJOR = 0,
     parameter               PARAM_VERSION_NUMBER_MINOR = 0,
-    parameter               PARAM_CUSTOM_VALUE = 0,
-) (					       
+    parameter               PARAM_CUSTOM_VALUE = 0
+) (
     input                   clk,
     input                   rst,
     input                   rst_cfg_reload,
@@ -456,3 +454,5 @@ module pcileech_fifo #(
       .USRDONETS        ( 1'b1              )  // <-
     );
 `endif /* ENABLE_STARTUPE2 */
+
+endmodule

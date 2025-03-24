@@ -99,12 +99,12 @@ module pcileech_pcie_cfg_a7(
     reg     [31:0]      rwi_count_cfgspace_status_cl;
     bit     [31:0]      base_address_register_reg;
 
-      reg  cfg_int_valid;
-      reg [4:0]  cfg_msg_num;
-      reg  cfg_int_assert;
-      reg [7:0]  cfg_int_di;
-      reg  cfg_int_stat; 
-      reg [31:0]  refresh_aux;
+    reg  cfg_int_valid;
+    reg [4:0]  cfg_msg_num;
+    reg  cfg_int_assert;
+    reg [7:0]  cfg_int_di;
+    reg  cfg_int_stat; 
+    reg [31:0]  refresh_aux;
    
     // ------------------------------------------------------------------------
     // REGISTER FILE: READ-ONLY LAYOUT/SPECIFICATION
@@ -270,6 +270,13 @@ module pcileech_pcie_cfg_a7(
             
         end
     endtask
+    
+    reg[7:0] cfg_int_di;
+    reg[4:0] cfg_msg_num;
+    reg cfg_int_assert;
+    reg cfg_int_valid;
+    wire cfg_int_ready = ctx.cfg_interrupt_rdy;
+    reg cfg_int_stat;
     
     assign ctx.cfg_mgmt_rd_en               = rwi_cfg_mgmt_rd_en & ~ctx.cfg_mgmt_rd_wr_done;
     assign ctx.cfg_mgmt_wr_en               = rwi_cfg_mgmt_wr_en & ~ctx.cfg_mgmt_rd_wr_done;
@@ -459,7 +466,7 @@ module pcileech_pcie_cfg_a7(
                 
             end
 	// Thank you Kilmu for original logic <3
-    	// This logic is different than what generated the drvscan-interrupt-info screenshot in the README.md
+    // This logic is different than what generated the drvscan-interrupt-info screenshot in the README.md
 	wire o_int; // Interrupt output signal, triggers the interrupt being sent
 	always @ ( posedge clk_pcie ) begin
 		// State Management
@@ -476,18 +483,16 @@ module pcileech_pcie_cfg_a7(
 		end
 	end
 	time int_cnt = 0;
-    // If you want to get a similar reading to the 9,051,274 MSI-X int count in the screenshot:
-    // Adjust int_cycle_count back to 32'd100000000 (100M)
-	parameter int_cycle_count = 32'd100000 // Counter, adjust as needed
 	always @ ( posedge clk_pcie ) begin
 		// Interrupt Timer
 		if (rst) begin
 			int_cnt <= 0;
-		end else if (int_cnt == int_cycle_count) begin
+		end else if (int_cnt == 32'd100000) begin
 			int_cnt <= 0;
 		end else if (int_enable) begin
 			int_cnt <= int_cnt + 1;
 		end
 	end
-	assign o_int = (int_cnt == int_cycle_count); // 100K cycles
+	// 	
+	assign o_int = (int_cnt == 32'd100000); // Counter - 100K cycles
 endmodule

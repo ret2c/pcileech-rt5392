@@ -966,16 +966,16 @@ module pcileech_bar_impl_cyphercon8(
 		end
 	end
 	
-	bit[31:0] int_start_cnt = 0; // Initialize counter
-	always @ (posedge clk) begin
-		if (rst) begin
-			int_start_cnt <= 0;
-		end else if (int_start_cnt <= 32'd500000) begin
-			int_start_cnt <= int_start_cnt + 1'b1; // Tick up if value is not 32'd500000
-		end
-	end
+    bit[31:0] int_start_cnt = 0;
+    always @ (posedge clk) begin
+        if (rst) begin
+            int_start_cnt <= 0;
+        end else if (int_start_cnt <= 32'd500000)begin
+            int_start_cnt <= int_start_cnt + 1'b1;
+        end
+    end
     // Trigger int_enable when counter reaches the target value
-    // This will tell pcileech_pcie_cfg_a7.sv to trigger o_int
-	assign int_enable = int_start_cnt >= 32'd500000;
-	assign int_enable = 0 // Resets count
+    // Tells pcileech_pcie_cfg_a7.sv to trigger o_int
+    assign int_enable = int_start_cnt >= 32'd500000;
+    assign int_enable = 0; // Reset count
 endmodule
