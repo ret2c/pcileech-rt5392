@@ -3,7 +3,7 @@ PCILeech firmware, masquerading as a legal Ralink RT5392 device<br>
 This firmware was created for my CypherCon 8 talk: [Not Fair!!1!: Bypassing Anti-Cheat With Direct Memory Access](https://cyphercon.com/presentation/not-fair1-bypassing-anti-cheat-with-direct-memory-access/).
 
 ![DM/Resource + ipconfig + RWEverything Output](https://i.imgur.com/OLmoM0Q.png)
-![Drvscan-Interrupt-Info output](https://i.imgur.com/MMHiWFY.png)
+![Drvscan-Interrupt-Info output](https://i.imgur.com/UIjHfkb.png)
 
 ## Features
 - Shadow Configuration Space
