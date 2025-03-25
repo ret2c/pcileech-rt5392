@@ -28,6 +28,14 @@ List of files that have been changed from the original [pcileech-fpga](https://g
  
 Realistically, you could configure each and every file within this repository for your intended purpose (like `tlp_magic` in `/src/pcileech_fifo.sv` for DNA Lock) but it's not necessary for getting a pass on [drvscan-interrupt-info](https://github.com/Crump3tte/drvscan-interrupt-info).
 
+## Additional Notes
+- I don't have a lot of hardware to test each flavor (different cards, 75T/100T, etc.). I can only provide support for 35T cards
+- I tested this FW on an older desktop with an i5 CPU, might have issues on different hardware
+- Be sure you're flashing this FW correct, I only used [Kilmu's Flash Tools](https://github.com/kilmu1337/DMA-Flash-Tools/)
+- IOMMU/vt-d, Secure Boot, (maybe NX-Bit), etc. etc. need to be disabled on the target PC to flash
+- BME is flipped to `1` in this repo, to debug FW w/ drvscan, flip Line 222 to `rw[21] <= 0;` in `src/pcileech_pcie_cfg_a7.sv`
+- If you have any problems, please open an [Issue](https://github.com/ret2c/pcileech-rt5392/issues) through GitHub
+
 ## Thank you:
 For support, guidance, and resources.
 - [Simonrak](https://github.com/Simonrak/)
