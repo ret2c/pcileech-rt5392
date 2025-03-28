@@ -46,7 +46,8 @@ module pcileech_tlps128_bar_controller(
     input [15:0]            pcie_id,
     input [31:0]            base_address_register,
     IfAXIS128.sink_lite     tlps_in,
-    IfAXIS128.source        tlps_out
+    IfAXIS128.source        tlps_out,
+    output wire             int_enable
 );
     
     // ------------------------------------------------------------------------
