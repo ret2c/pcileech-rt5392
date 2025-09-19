@@ -1,6 +1,6 @@
 # PCILeech RT5392 Firmware
 PCILeech firmware, masquerading as a legal Ralink RT5392 device<br>
-This firmware was created for my CypherCon 8 talk: [Not Fair!!1!: Bypassing Anti-Cheat With Direct Memory Access](https://www.youtube.com/watch?v=ICKDWryepFg). It serves as a proof-of-concept into security research about DMA cheating. I am not an expert in this field, and I won't be able to provide consistent support across different constraints. I do not recommend using this firmware to cheat in (videogame).
+This firmware was created for my CypherCon 8 talk: [Not Fair!!1!: Bypassing Anti-Cheat With Direct Memory Access](https://www.youtube.com/watch?v=ICKDWryepFg). It serves as a proof-of-concept into security research about DMA cheating.
 
 ![DM/Resource + ipconfig + RWEverything Output](https://i.imgur.com/OLmoM0Q.png)
 ![Drvscan-Interrupt-Info output](https://i.imgur.com/UIjHfkb.png)
@@ -29,8 +29,6 @@ List of files that have been changed from the original [pcileech-fpga](https://g
 Realistically, you could configure each and every file within this repository for your intended purpose (like `tlp_magic` in `/src/pcileech_fifo.sv` for DNA Lock) but it's not necessary for getting a pass on [drvscan-interrupt-info](https://github.com/Crump3tte/drvscan-interrupt-info).
 
 ## Additional Notes
-- **07/23/2025**: This firmware is fully unsupported now, I will no longer be able to assist with any issues.
-- **04/09/2025**: Regarding some of the issues people have opened regarding interrupts - Win10 is having a lot of issues as of late, my current recommendation is to switch over to Win11 since cloned devices aren't producing them on Win10 as expected.
 - I don't have a lot of hardware to test each flavor (different cards, 75T/100T, etc.). I can only provide support for 35T cards
 - I tested this FW on an older desktop with an i5 CPU, might have issues on different hardware
 - Be sure you're flashing this FW correct, I only used [Kilmu's Flash Tools](https://github.com/kilmu1337/DMA-Flash-Tools/)
